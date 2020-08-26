@@ -61,7 +61,11 @@ export default {
       };
 
       let retorno = await this.setExtrato(params);
-
+      let loader = this.$loading.show({
+        // Optional parameters
+        container: this.$refs.formContainer,
+        canCancel: true
+      });
       if (retorno.data.code == 200) {
         this.$bvModal.hide('nova-transacao');
         EventBus.$emit('nova-transacao');
@@ -72,6 +76,7 @@ export default {
           this.balance = this.$helper.numberFormat(retornoConta.balance, 2, ',', '.');
           this.atualizado = this.$moment(retornoConta.updated_at).format('DD/MM/YYYY hh:mm:ss');
         }
+        loader.hide();
       }
 
       this.makeToast(
@@ -86,6 +91,9 @@ export default {
         variant: variant,
         solid: true
       });
+    },
+    listaContas() {
+      this.$router.push('/');
     },
     ...mapActions(['getSaldo', 'setExtrato', 'getConta', 'setConta'])
   }

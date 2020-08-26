@@ -3,7 +3,7 @@
     <ul class="list-group mb-3">
       <li class="list-group-item d-flex justify-content-between lh-condensed">
         <div>
-          <h6 class="my-0 text-left">Saldo</h6>
+          <h5 class="my-0 text-left">Saldo</h5>
         </div>
         <span class="text-muted"
           >R$ <span :class="classe">{{ balance }}</span></span
@@ -18,6 +18,9 @@
             >Sacar</b-button
           >
         </b-button-group>
+      </li>
+      <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <b-button variant="info" class="w-100" @click.stop.prevent="listaContas">Contas</b-button>
       </li>
     </ul>
 

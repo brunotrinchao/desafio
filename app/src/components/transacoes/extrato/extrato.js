@@ -26,7 +26,7 @@ export default {
         {
           key: 'created_at',
           label: 'Data',
-          sortable: true
+          sortable: false
         }
       ],
       items: []
@@ -39,6 +39,11 @@ export default {
 
   beforeMount() {
     EventBus.$on('filtrar', async dados => {
+      let loader = this.$loading.show({
+        // Optional parameters
+        container: this.$refs.formContainer,
+        canCancel: true
+      });
       let retorno = await this.getExtrato(dados);
       this.items = retorno.data.map(elemento => {
         elemento.type = elemento.type == 'D' ? 'Depósito' : 'Saque';
@@ -51,6 +56,7 @@ export default {
 
         return elemento;
       });
+      loader.hide();
     });
   },
 

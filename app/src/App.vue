@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="container">
-      <div class="py-5 text-center">
+      <div class="py-4 text-center">
         <img
           alt="Capgemini logo"
           width="300"

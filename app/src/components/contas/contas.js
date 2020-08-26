@@ -46,6 +46,11 @@ export default {
   },
   methods: {
     async atualizaListaContas() {
+      let loader = this.$loading.show({
+        // Optional parameters
+        container: this.$refs.formContainer,
+        canCancel: true
+      });
       let contas = await this.getTodasContas();
       this.items = contas.data.map(elemento => {
         elemento.type = elemento.type == 'CC' ? 'Conta corrente' : 'Conta poupança';
@@ -58,6 +63,7 @@ export default {
 
         return elemento;
       });
+      loader.hide();
     },
     async selecionaRow(item) {
       let conta = await this.getConta(item.id);

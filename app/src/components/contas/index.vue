@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="contas">
     <h4 class="mb-3">
       Contas
       <b-button class="btn-sm float-right" @click.stop.prevent="modalConta" variant="primary"
