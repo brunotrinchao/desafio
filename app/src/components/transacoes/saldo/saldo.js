@@ -10,7 +10,6 @@ export default {
       _conta: null,
       atualizado: null,
       balance: null,
-      classe: 'text-danger',
       transacao: {
         tipo: null,
         texto: null,
@@ -33,9 +32,11 @@ export default {
 
   async beforeMount() {
     this._conta = await this.conta;
-    this.atualizado = this.$moment(this.conta.updated_at).format('DD/MM/YYYY hh:mm:ss');
-    this.balance = this.$helper.numberFormat(this.conta.balance, 2, ',', '.');
-    this.classe = this.conta.balance > 0 ? 'text-success' : 'text-danger';
+    if(this._conta){
+      this.atualizado = this.$moment(this.conta.updated_at).format('DD/MM/YYYY hh:mm:ss');
+      this.balance = this.$helper.numberFormat(this.conta.balance, 2, ',', '.');
+      this.classe = this.conta.balance;
+    }
   },
 
   methods: {

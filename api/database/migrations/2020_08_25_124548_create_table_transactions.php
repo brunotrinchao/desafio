@@ -17,7 +17,7 @@ class CreateTableTransactions extends Migration
             $table->id();
             $table->unsignedBigInteger('account_id');
             $table->enum('type', ['D', 'S']);
-            $table->float('value', 2,10);
+            $table->decimal('value', 10, 2);
             $table->timestamps();
 
             $table->foreign('account_id')->references('id')->on('accounts');

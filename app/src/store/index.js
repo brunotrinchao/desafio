@@ -42,8 +42,11 @@ export default new Vuex.Store({
     },
     // transacoes
     async getExtrato({ state }, param) {
+      let response = null;
+      if(state.conta.id){
       let account_id = state.conta.id;
-      let response = await vue.$api.get('/transacao', { params: { ...param, account_id } });
+      response = await vue.$api.get('/transacao', { params: { ...param, account_id } });
+      }
       return response.data;
     },
     async setExtrato(_, param) {

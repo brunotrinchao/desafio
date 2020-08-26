@@ -6,7 +6,7 @@
           <h5 class="my-0 text-left">Saldo</h5>
         </div>
         <span class="text-muted"
-          >R$ <span :class="classe">{{ balance }}</span></span
+          >R$ <b>{{ balance }}</b></span
         >
       </li>
       <li class="list-group-item d-flex justify-content-between lh-condensed">

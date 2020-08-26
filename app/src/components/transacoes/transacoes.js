@@ -18,6 +18,7 @@ export default {
     let conta = await this.conta;
     if (!conta) {
       this.$router.push('/');
+      return;
     }
   }
 };

@@ -12,6 +12,7 @@ export default {
 
   data() {
     return {
+      _conta: null,
       fields: [
         {
           key: 'type',
@@ -39,24 +40,28 @@ export default {
 
   beforeMount() {
     EventBus.$on('filtrar', async dados => {
-      let loader = this.$loading.show({
-        // Optional parameters
-        container: this.$refs.formContainer,
-        canCancel: true
-      });
-      let retorno = await this.getExtrato(dados);
-      this.items = retorno.data.map(elemento => {
-        elemento.type = elemento.type == 'D' ? 'Depósito' : 'Saque';
+      this._conta = await this.conta;
 
-        if (elemento.value) {
-          elemento.value = `R$ ${this.$helper.numberFormat(elemento.value, 2, ',', '.')}`;
-        }
+    if(this._conta){
+        let loader = this.$loading.show({
+          // Optional parameters
+          container: this.$refs.formContainer,
+          canCancel: true
+        });
+        let retorno = await this.getExtrato(dados);
+        this.items = retorno.data.map(elemento => {
+          elemento.type = elemento.type == 'D' ? 'Depósito' : 'Saque';
 
-        elemento.created_at = this.$moment(elemento.created_at).format('DD/MM/YYYY hh:mm:ss');
+          if (elemento.value) {
+            elemento.value = `R$ ${this.$helper.numberFormat(elemento.value, 2, ',', '.')}`;
+          }
 
-        return elemento;
-      });
-      loader.hide();
+          elemento.created_at = this.$moment(elemento.created_at).format('DD/MM/YYYY hh:mm:ss');
+
+          return elemento;
+        });
+        loader.hide();
+      }
     });
   },
 
