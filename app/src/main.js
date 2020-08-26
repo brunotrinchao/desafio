@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { BootstrapVue } from 'bootstrap-vue';
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 import VueMoment from 'vue-moment';
 import App from './App.vue';
 import store from './store';
@@ -13,7 +13,11 @@ import api from '@/api/api';
 import helper from '@/helper';
 Vue.use(helper);
 
+import money from 'v-money';
+Vue.use(money, { precision: 4 });
+
 Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons);
 Vue.use(VueMoment);
 
 Vue.config.productionTip = false;

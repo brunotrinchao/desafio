@@ -7,26 +7,48 @@ const vue = new Vue();
 
 export default new Vuex.Store({
   state: {
-    conta: {
-      id: null
-    }
+    conta: null
   },
   mutations: {
-    SET_CONTA(state, id) {
-      state.conta = id;
+    SET_CONTA(state, conta) {
+      state.conta = conta;
     }
   },
   actions: {
+    // Contas
     async getTodasContas() {
       let response = await vue.$api.get('/conta', {});
       return response.data;
     },
-    async getConta({ commit }, params) {
-      let retorno = await vue.$api.get('/conta', { params });
+    async getConta(_, id) {
+      let retorno = await vue.$api.get(`/conta/${id}`, {});
 
-      commit('SET_CONTA', retorno.data);
+      return retorno.data.data;
+    },
+    setConta({ commit }, data) {
+      commit('SET_CONTA', data);
+    },
+    async postConta(_, params) {
+      let retorno = null;
+
+      try {
+        let ret = await vue.$api.post('/conta', { user_id: 1, ...params });
+        retorno = ret.data;
+      } catch (erro) {
+        retorno = erro.response.data;
+      }
 
       return retorno;
+    },
+    // transacoes
+    async getExtrato({ state }, param) {
+      let account_id = state.conta.id;
+      let response = await vue.$api.get('/transacao', { params: { ...param, account_id } });
+      return response.data;
+    },
+    async setExtrato(_, param) {
+      let response = await vue.$api.post('/transacao', param);
+      return response.data;
     }
   },
   getters: {

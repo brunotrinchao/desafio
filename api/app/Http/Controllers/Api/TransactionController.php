@@ -28,20 +28,39 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $trasaction = $this->transaction;
+        try {
+            $trasaction = $this->transaction;
+            $account_id = $request->account_id;
 
-        if($request->has('start_date') && $request->has('end_date')){
+            if(!$account_id){
+                throw new Exception("Conta não informada", 1);
+            }
 
-            $start = Carbon::parse($request->start_date);
-            $end = Carbon::parse($request->end_date);
+            if($request->has('start_date') && $request->has('end_date')){
 
-            $transactions = $trasaction->orderBy('created_at', 'DESC')->where('created_at', '>=', $start)
-                                        ->where('created_at','<=',$end)
-                                        ->paginate(5);
-        }else{
-            $transactions = $this->transaction->paginate(20);
+                $start = $request->start_date . "00:00:00";
+                $end = $request->end_date . "00:00:00";
+
+                $transactions = $trasaction->orderBy('created_at', 'DESC')
+                                            ->where('account_id','=',$account_id)
+                                            ->where('created_at', '>=', $start)
+                                            ->where('created_at','<=',$end)
+                                            ->paginate(100);
+            }else{
+                $transactions = $trasaction->where('account_id','=',$account_id)->paginate(20);
+            }
+            return response()->json($transactions, 200);
+        }catch (\Exception $e){
+            return response()->json(
+                ['data' =>
+                    [
+                        'type' => 'error',
+                        'msg' => $e->getMessage(),
+                        'code' => 400
+                    ]
+                ]
+            );
         }
-        return response()->json($transactions, 200);
     }
 
     /**

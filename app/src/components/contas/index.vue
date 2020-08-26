@@ -31,7 +31,12 @@
             </div>
             <div class="col-md-6">
               <b-form-group label="Valor inicial">
-                <b-form-input id="balance" type="text" :value="form.balance"></b-form-input>
+                <b-form-input
+                  id="balance"
+                  type="text"
+                  v-model.lazy="form.balance"
+                  v-money="form.money"
+                ></b-form-input>
               </b-form-group>
             </div>
           </div>
