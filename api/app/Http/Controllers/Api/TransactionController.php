@@ -32,33 +32,30 @@ class TransactionController extends Controller
             $trasaction = $this->transaction;
             $account_id = $request->account_id;
 
-            if(!$account_id){
-                throw new Exception("Conta não informada", 1);
+            if (!$account_id) {
+                throw new \Exception("Conta não informada", 1);
             }
 
-            if($request->has('start_date') && $request->has('end_date')){
+            if ($request->has('start_date') && $request->has('end_date')) {
 
-                $start = $request->start_date . "00:00:00";
-                $end = $request->end_date . "00:00:00";
+                $start = $request->start_date . " 00:00:00";
+                $end = $request->end_date . " 23:59:59";
 
                 $transactions = $trasaction->orderBy('created_at', 'DESC')
-                                            ->where('account_id','=',$account_id)
-                                            ->where('created_at', '>=', $start)
-                                            ->where('created_at','<=',$end)
-                                            ->paginate(100);
-            }else{
-                $transactions = $trasaction->where('account_id','=',$account_id)->paginate(20);
+                    ->where('account_id', '=', $account_id)
+                    ->whereBetween('created_at', [$start, $end])->paginate(100);
+            } else {
+                $transactions = $trasaction->where('account_id', '=', $account_id)->paginate(20);
             }
             return response()->json($transactions, 200);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(
                 ['data' =>
-                    [
-                        'type' => 'error',
-                        'msg' => $e->getMessage(),
-                        'code' => 400
-                    ]
-                ]
+                [
+                    'type' => 'error',
+                    'msg' => $e->getMessage(),
+                    'code' => 400
+                ]]
             );
         }
     }
@@ -73,12 +70,12 @@ class TransactionController extends Controller
     {
         $data = $request->all();
 
-        $typeStr = $data['type'] === 'D'? 'Depósito' : 'Saque';
+        $typeStr = $data['type'] === 'D' ? 'Depósito' : 'Saque';
 
         try {
             $transactions = $this->transaction->create($data);
 
-            if($transactions){
+            if ($transactions) {
 
                 $account = $transactions->account()->find($transactions->account_id);
 
@@ -89,22 +86,20 @@ class TransactionController extends Controller
 
             return response()->json(
                 ['data' =>
-                    [
-                        'type' => 'success',
-                        'msg' => "{$typeStr} efetuado com sucesso.",
-                        'code' => 200
-                    ]
-                ]
+                [
+                    'type' => 'success',
+                    'msg' => "{$typeStr} efetuado com sucesso.",
+                    'code' => 200
+                ]]
             );
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(
                 ['data' =>
-                    [
-                        'type' => 'error',
-                        'msg' => $e->getMessage(),
-                        'code' => 400
-                    ]
-                ]
+                [
+                    'type' => 'error',
+                    'msg' => $e->getMessage(),
+                    'code' => 400
+                ]]
             );
         }
     }
@@ -121,8 +116,8 @@ class TransactionController extends Controller
         return new TransactionResource($transations);
     }
 
-    private function calculaTransacao($valueOld, $valueNew, $type){
-        return $type === 'D'? ($valueOld + $valueNew) : ($valueOld - $valueNew);
+    private function calculaTransacao($valueOld, $valueNew, $type)
+    {
+        return $type === 'D' ? ($valueOld + $valueNew) : ($valueOld - $valueNew);
     }
-
 }
